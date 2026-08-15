@@ -1,0 +1,38 @@
+ref: elasticsearch.cluster
+label: Cluster information
+description: Get Elasticsearch cluster health, root information, or cluster statistics
+enabled: true
+runner_type: python
+entry_point: elasticsearch.py
+parameter_delivery: stdin
+parameter_format: json
+output_format: json
+default_execution_permission_set_refs:
+  - standard
+timeout: 120
+parameters:
+  endpoint:
+    type: string
+    required: true
+  credential_key_ref:
+    type: string
+    required: true
+  timeout_seconds:
+    type: integer
+    default: 30
+    minimum: 1
+    maximum: 300
+  operation:
+    type: string
+    required: true
+    enum: [health, info, stats]
+output:
+  ok:
+    type: boolean
+  operation:
+    type: string
+  status:
+    type: integer
+  data:
+    type: object
+tags: [elasticsearch, cluster, read]

@@ -1,0 +1,56 @@
+ref: elasticsearch.index
+label: Index operations
+description: Curated Elasticsearch index read and lifecycle operations using concrete names
+enabled: true
+runner_type: python
+entry_point: elasticsearch.py
+parameter_delivery: stdin
+parameter_format: json
+output_format: json
+default_execution_permission_set_refs: [standard]
+timeout: 300
+parameters:
+  endpoint:
+    type: string
+    required: true
+  credential_key_ref:
+    type: string
+    required: true
+  timeout_seconds:
+    type: integer
+    default: 30
+    minimum: 1
+    maximum: 300
+  operation:
+    type: string
+    required: true
+    enum: [list, get, create, settings_get, settings_update, mappings_get, mappings_update, delete, open, close, refresh, forcemerge]
+  index:
+    type: string
+  body:
+    type: object
+  limit:
+    type: integer
+    default: 100
+    minimum: 1
+    maximum: 1000
+  confirm:
+    type: string
+  read_only_confirmed:
+    type: boolean
+    default: false
+  max_num_segments:
+    type: integer
+    default: 1
+    minimum: 1
+    maximum: 10
+output:
+  ok:
+    type: boolean
+  operation:
+    type: string
+  status:
+    type: integer
+  data:
+    type: object
+tags: [elasticsearch, index]

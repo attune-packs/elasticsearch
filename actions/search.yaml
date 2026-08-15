@@ -1,0 +1,68 @@
+ref: elasticsearch.search
+label: Bounded search and count
+description: Search or count concrete Elasticsearch indices with bounded windows and scripts disabled
+enabled: true
+runner_type: python
+entry_point: elasticsearch.py
+parameter_delivery: stdin
+parameter_format: json
+output_format: json
+default_execution_permission_set_refs: [standard]
+timeout: 120
+parameters:
+  endpoint:
+    type: string
+    required: true
+  credential_key_ref:
+    type: string
+    required: true
+  timeout_seconds:
+    type: integer
+    default: 30
+    minimum: 1
+    maximum: 300
+  operation:
+    type: string
+    required: true
+    enum: [search, count]
+  indices:
+    type: array
+    required: true
+  query:
+    type: object
+  size:
+    type: integer
+    default: 10
+    minimum: 0
+    maximum: 500
+  from:
+    type: integer
+    default: 0
+    minimum: 0
+    maximum: 10000
+  sort:
+    type: array
+  search_after:
+    type: array
+  source_fields:
+    type: array
+  query_timeout_ms:
+    type: integer
+    default: 5000
+    minimum: 100
+    maximum: 60000
+  terminate_after:
+    type: integer
+    default: 10000
+    minimum: 1
+    maximum: 10000
+output:
+  ok:
+    type: boolean
+  operation:
+    type: string
+  status:
+    type: integer
+  data:
+    type: object
+tags: [elasticsearch, search, read]

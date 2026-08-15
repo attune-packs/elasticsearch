@@ -1,0 +1,16 @@
+Elasticsearch Attune Pack
+Copyright 2026 Attune Community
+
+This work is an independent modernization informed by and attributed to the
+StackStorm Exchange Elasticsearch pack, version v2.0.1, revision
+9aba2b68da26ec356b6c533d902e560ff76c4980:
+
+  https://github.com/StackStorm-Exchange/stackstorm-elasticsearch
+
+The attributed source is licensed under the Apache License, Version 2.0. Its
+Curator-based implementation was not copied. Obsolete Curator 5, `_all` index,
+optimize, mapping-type, and legacy client assumptions were intentionally
+excluded.
+
+Elasticsearch is a trademark of Elasticsearch B.V. This project is not
+affiliated with or endorsed by Elasticsearch B.V.

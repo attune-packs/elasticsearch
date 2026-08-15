@@ -1,0 +1,45 @@
+ref: elasticsearch.ilm
+label: ILM operations
+description: Get, put, or delete ILM policies and inspect ILM status or concrete index lifecycle state
+enabled: true
+runner_type: python
+entry_point: elasticsearch.py
+parameter_delivery: stdin
+parameter_format: json
+output_format: json
+default_execution_permission_set_refs: [standard]
+timeout: 120
+parameters:
+  endpoint:
+    type: string
+    required: true
+  credential_key_ref:
+    type: string
+    required: true
+  timeout_seconds:
+    type: integer
+    default: 30
+    minimum: 1
+    maximum: 300
+  operation:
+    type: string
+    required: true
+    enum: [policy_get, policy_put, policy_delete, status, explain]
+  policy:
+    type: string
+  index:
+    type: string
+  body:
+    type: object
+  confirm:
+    type: string
+output:
+  ok:
+    type: boolean
+  operation:
+    type: string
+  status:
+    type: integer
+  data:
+    type: object
+tags: [elasticsearch, ilm]
