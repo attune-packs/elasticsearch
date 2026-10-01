@@ -41,7 +41,7 @@ key reference, never credential material.
 
 ```bash
 attune key create \
-  --ref elasticsearch.production \
+  --local-ref production \
   --name "Production Elasticsearch API key" \
   --value '{"auth_type":"api_key","api_key":"BASE64_ENCODED_ELASTIC_API_KEY","allowed_endpoints":["https://es.example.com:9200"],"allow_private_hosts":false}' \
   --owner-type pack \
@@ -60,7 +60,7 @@ Supported key values are:
 Each action requests Attune's `standard` execution permission set. The worker
 injects a short-lived `ATTUNE_API_TOKEN`, which the action uses to read only the
 pack-owned key through `/api/v1/keys/{ref}`. The action fails closed if the
-execution token is absent, the reference is outside `elasticsearch.*`, or the
+execution token is absent, the reference is outside `pack.elasticsearch.*`, or the
 API response does not identify the key owner as this pack.
 
 ## Connection
@@ -69,7 +69,7 @@ All actions require:
 
 - `endpoint`: an HTTPS origin authorized by the selected key's exact
   `allowed_endpoints` list, such as `https://es.example.com:9200`.
-- `credential_key_ref`: an `elasticsearch.*` pack key.
+- `credential_key_ref`: a `pack.elasticsearch.*` key.
 - `timeout_seconds`: 1 to 300 seconds. No request is retried.
 
 The pack-owned key may contain `ca_file` for a custom CA bundle and
@@ -87,7 +87,7 @@ Cluster health:
 ```bash
 attune action execute elasticsearch.cluster --watch --params-json '{
   "endpoint":"https://es.example.com:9200",
-  "credential_key_ref":"elasticsearch.production",
+  "credential_key_ref":"pack.elasticsearch.production",
   "operation":"health"
 }'
 ```
@@ -97,7 +97,7 @@ Create an index with typeless mappings:
 ```json
 {
   "endpoint": "https://es.example.com:9200",
-  "credential_key_ref": "elasticsearch.production",
+  "credential_key_ref": "pack.elasticsearch.production",
   "operation": "create",
   "index": "events-2026",
   "body": {
@@ -112,7 +112,7 @@ Optimistic document replacement:
 ```json
 {
   "endpoint": "https://es.example.com:9200",
-  "credential_key_ref": "elasticsearch.production",
+  "credential_key_ref": "pack.elasticsearch.production",
   "operation": "index",
   "index": "events-2026",
   "document_id": "event-42",
@@ -128,7 +128,7 @@ Bounded search with `search_after`:
 ```json
 {
   "endpoint": "https://es.example.com:9200",
-  "credential_key_ref": "elasticsearch.production",
+  "credential_key_ref": "pack.elasticsearch.production",
   "operation": "search",
   "indices": ["events-2026"],
   "query": {"term": {"service": "api"}},
@@ -144,7 +144,7 @@ existing indices, aliases, or data streams with the requested prefix:
 ```json
 {
   "endpoint": "https://es.example.com:9200",
-  "credential_key_ref": "elasticsearch.production",
+  "credential_key_ref": "pack.elasticsearch.production",
   "operation": "restore",
   "repository": "backups",
   "snapshot": "nightly-2026-08-14",

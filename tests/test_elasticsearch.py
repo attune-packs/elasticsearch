@@ -446,15 +446,24 @@ class SecurityTests(unittest.TestCase):
         self.addCleanup(lambda: (os.environ.clear(), os.environ.update(previous)))
         os.environ["ATTUNE_API_URL"] = "https://attune.example.test"
         os.environ["ATTUNE_API_TOKEN"] = "execution-token"
-        good = lambda *args, **kwargs: FakeResponse(
-            {"data": {"owner_pack_ref": "elasticsearch", "value": {"auth_type": "api_key", "api_key": "x"}}}
+        requests = []
+
+        def good(request, *args, **kwargs):
+            requests.append(request)
+            return FakeResponse(
+                {"data": {"owner_pack_ref": "elasticsearch", "value": {"auth_type": "api_key", "api_key": "x"}}}
+            )
+
+        self.assertEqual(es._attune_key("pack.elasticsearch.production", good)["api_key"], "x")
+        self.assertEqual(
+            requests[0].full_url,
+            "https://attune.example.test/api/v1/keys/pack.elasticsearch.production",
         )
-        self.assertEqual(es._attune_key("elasticsearch.production", good)["api_key"], "x")
         bad = lambda *args, **kwargs: FakeResponse(
             {"data": {"owner_pack_ref": "other", "value": {"auth_type": "api_key", "api_key": "x"}}}
         )
         with self.assertRaises(es.ActionError):
-            es._attune_key("elasticsearch.production", bad)
+            es._attune_key("pack.elasticsearch.production", bad)
         with self.assertRaises(es.ActionError):
             es._attune_key("other.production", good)
 

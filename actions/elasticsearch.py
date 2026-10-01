@@ -176,8 +176,8 @@ def _read_limited(response: Any, limit: int) -> bytes:
 
 
 def _attune_key(ref: str, opener: Callable[..., Any] | None = None) -> dict[str, Any]:
-    if not isinstance(ref, str) or not re.fullmatch(r"elasticsearch\.[a-z0-9_-]+", ref):
-        raise ActionError("credential_key_ref must be an elasticsearch.* pack key")
+    if not isinstance(ref, str) or not re.fullmatch(r"pack\.elasticsearch\.[a-z0-9][a-z0-9_-]{0,62}", ref):
+        raise ActionError("credential_key_ref must be a pack.elasticsearch.* key")
     api_url = os.environ.get("ATTUNE_API_URL", "").rstrip("/")
     token = os.environ.get("ATTUNE_API_TOKEN", "")
     if not api_url or not token:
